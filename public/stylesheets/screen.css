@@ -4,15 +4,13 @@ body {
   background: #36a1d9; }
 
 h1 {
-  -webkit-transition: all 3s ease-out;
-          transition: all 3s ease-out;
+  transition: all 3s ease-out;
   -webkit-animation: pulsate 8s ease-out infinite;
           animation: pulsate 8s ease-out infinite;
   position: absolute;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
-      -ms-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   margin: 0;
   font-family: Helvetica, Arial, Sand-serif;
