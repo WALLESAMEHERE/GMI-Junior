@@ -330,4 +330,17 @@ body {
   -webkit-tap-highlight-color: #0085A1; }
 
 .filterByDate {
-  text-align: right; }
+  text-align: right;
+  font-size: .6em; }
+  .filterByDate button {
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    background-color: white;
+    border-radius: 0;
+    outline: none; }
+    .filterByDate button:hover, .filterByDate button:focus {
+      color: white;
+      background-color: #0085A1; }

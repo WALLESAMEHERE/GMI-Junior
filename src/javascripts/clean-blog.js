@@ -37,78 +37,89 @@ $(document).ready(function($) {
                 this.previousTop = currentTop;
             });
     }
-const basicUrl = 'http://api.nytimes.com/svc/search/v2/';
-/*
-$.ajax({
-        url: basicUrl,
-        data :{
-            'apikey' :'bb3525b506844487a87c0f9ac7aa1486',
-            'username' : 'WALLESAMEHERE'
-        },
-        type: "Get",
-        dataType: "json",
-        crossDomain : true,
-        success: function (data) {
-            console.log(data)
-        },
-        error: function (message) { alert(message); 
-        }
-
-    });
-*/
-// NOWY REQ
-var info = {
-    apikey :'bb3525b506844487a87c0f9ac7aa1486',
-    name : 'WALLESAMEHERE'
-}
-function sendA(endpoint, method, data, sCallback, eCallback) {
+    // **** Above JS from Template **** 
+    "use strict"
+    // basic API url and user information
+    const basicUrl = 'http://api.nytimes.com/svc/search/v2/';
+    const info = {
+        apikey: 'bb3525b506844487a87c0f9ac7aa1486',
+        name: 'WALLESAMEHERE'
+    }
+    // general function - request to API
+    function sendA(endpoint, method, data, sCallback, eCallback) {
         $.ajax({
-                type: method,
-                data: data,
-                url: basicUrl + endpoint,
-                dataType: "json",
-                crossDomain : true,
-                success: function (data) {
-                    sCallback(data);
-                },
-                error: function (message) { 
-                    eCallback(message); 
-                }
-            })
-
+            type: method,
+            data: data,
+            url: basicUrl + endpoint,
+            dataType: "json",
+            crossDomain: true,
+            success: function(data) {
+                sCallback(data);
+            },
+            error: function(message) {
+                eCallback(message);
+            }
+        })
     }
-sendA('articlesearch.json','GET', info, loadArticle, errorLoad);
-
-function loadArticle(data){
-    var text = data.response;
-    var arrayWithArticles = text.docs
-    for(var i =0;i<arrayWithArticles.length;i++){
-        showAtricles(arrayWithArticles[i]);
+    // send req to api and get response
+    sendA('articlesearch.json', 'GET', info, loadArticle, errorLoad);
+    // succes function
+    function loadArticle(data) {
+        var ajaxResponse = data.response;
+        var objectWithArticles = ajaxResponse.docs
+        // function which get and push articles to site
+        objloop(objectWithArticles);
+        // 
+        $('#latestData').on('click', function() {
+            sortNew(objectWithArticles);
+        });
+        $('#oldestData').on('click', function() {
+            sortOld(objectWithArticles);
+        });
     }
-    $('#lowerData').on('click',function(){
-        console.log(arrayWithArticles);
-        arrayWithArticles.reverse();
-        console.log(arrayWithArticles);
-    });
-}
-function errorLoad(data){
-
-}
-
-function showAtricles(article){
-    var headline = article.headline.main;
-    var pubDate = article.pub_date;
-    var snippet = article.snippet;
-    var source = article.source;
-    var postedBy = article.byline.original;
-    var articleURL = article.web_url;
-    var appArticle = "<div class='main-article'><a href='"+articleURL+"'>";
-    appArticle += "<h2 class='post-title'>" + headline +"</h2>";
-    appArticle += "<h3 class='post-info'>" +snippet +"</h3></a>";
-    appArticle += "<p class='post-meta'>Posted <a href='#''>" +postedBy +"</a>";
-    appArticle += " on <span class='post-data'>" +pubDate +"</span>, " +source +"</p><div>";
-    $('.post-preview').append(appArticle); 
-}
-
-
+    // error function
+    function errorLoad(data) {
+        console.log(data);
+    }
+    // get articles and start function adding all to site
+    function objloop(array) {
+        for (var i = 0; i < array.length; i++) {
+            showArticles(array[i]);
+        };
+    };
+    // add articles to HTML
+    function showArticles(article) {
+        var headline = article.headline.main;
+        var pubDate = article.pub_date;
+        var snippet = article.snippet;
+        var source = article.source;
+        var postedBy = article.byline.original;
+        var articleURL = article.web_url;
+        var appArticle = "<div class='main-article'><a href='" + articleURL + "'>";
+        appArticle += "<h2 class='post-title'>" + headline + "</h2>";
+        appArticle += "<h3 class='post-info'>" + snippet + "</h3></a>";
+        appArticle += "<p class='post-meta'>Posted <a href='#''>" + postedBy + "</a>";
+        appArticle += " on <span class='post-data'>" + pubDate + "</span>, " + source + "</p><div>";
+        $('.post-preview').append(appArticle);
+    }
+    // function sort articles by date - newest to oldest
+    function sortNew(obj) {
+        $('.main-article').remove(); // remove articles and add sorted by date
+        obj.sort(function(a, b) {
+            a = new Date(a.pub_date);
+            b = new Date(b.pub_date);
+            return a > b ? -1 : a < b ? 1 : 0;
+        });
+        objloop(obj);
+    }
+    // function sort articles by date - oldest to newest
+    function sortOld(obj) {
+        $('.main-article').remove(); // remove articles and add sorted by date
+        obj.sort(function(a, b) {
+            a = new Date(a.pub_date);
+            b = new Date(b.pub_date);
+            return b > a ? -1 : b < a ? 1 : 0;
+        });
+        objloop(obj);
+    }
 });

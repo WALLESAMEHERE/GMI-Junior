@@ -37,161 +37,98 @@ $(document).ready(function($) {
                 this.previousTop = currentTop;
             });
     }
-const basicUrl = 'http://api.nytimes.com/svc/search/v2/';
-/*
-$.ajax({
-        url: basicUrl,
-        data :{
-            'apikey' :'bb3525b506844487a87c0f9ac7aa1486',
-            'username' : 'WALLESAMEHERE'
-        },
-        type: "Get",
-        dataType: "json",
-        crossDomain : true,
-        success: function (data) {
-            console.log(data)
-        },
-        error: function (message) { alert(message); 
-        }
-
-    });
-*/
-// NOWY REQ
-var info = {
-    apikey :'bb3525b506844487a87c0f9ac7aa1486',
-    name : 'WALLESAMEHERE'
-}
-function sendA(endpoint, method, data, sCallback, eCallback) {
+    // **** Above JS from Template **** 
+    "use strict"
+    // basic API url and user information
+    const basicUrl = 'http://api.nytimes.com/svc/search/v2/';
+    const info = {
+        apikey: 'bb3525b506844487a87c0f9ac7aa1486',
+        name: 'WALLESAMEHERE'
+    }
+    // general function - request to API
+    function sendA(endpoint, method, data, sCallback, eCallback) {
         $.ajax({
-                type: method,
-                data: data,
-                url: basicUrl + endpoint,
-                dataType: "json",
-                crossDomain : true,
-                success: function (data) {
-                    sCallback(data);
-                },
-                error: function (message) { 
-                    eCallback(message); 
-                }
-            })
-
+            type: method,
+            data: data,
+            url: basicUrl + endpoint,
+            dataType: "json",
+            crossDomain: true,
+            success: function(data) {
+                sCallback(data);
+            },
+            error: function(message) {
+                eCallback(message);
+            }
+        })
     }
-sendA('articlesearch.json','GET', info, loadArticle, errorLoad);
-
-function loadArticle(data){
-    var text = data.response;
-    var arrayWithArticles = text.docs
-    for(var i =0;i<arrayWithArticles.length;i++){
-        showAtricles(arrayWithArticles[i]);
+    // send req to api and get response
+    sendA('articlesearch.json', 'GET', info, loadArticle, errorLoad);
+    // succes function
+    function loadArticle(data) {
+        var ajaxResponse = data.response;
+        var objectWithArticles = ajaxResponse.docs
+        // function which get and push articles to site
+        objloop(objectWithArticles);
+        // 
+        $('#latestData').on('click', function() {
+            sortNew(objectWithArticles);
+        });
+        $('#oldestData').on('click', function() {
+            sortOld(objectWithArticles);
+        });
     }
-    $('#lowerData').on('click',function(){
-        console.log(arrayWithArticles);
-        arrayWithArticles.reverse();
-        console.log(arrayWithArticles);
-    });
-}
-function errorLoad(data){
-
-}
-
-function showAtricles(article){
-    var headline = article.headline.main;
-    var pubDate = article.pub_date;
-    var snippet = article.snippet;
-    var source = article.source;
-    var postedBy = article.byline.original;
-    var articleURL = article.web_url;
-    var appArticle = "<div class='main-article'><a href='"+articleURL+"'>";
-    appArticle += "<h2 class='post-title'>" + headline +"</h2>";
-    appArticle += "<h3 class='post-info'>" +snippet +"</h3></a>";
-    appArticle += "<p class='post-meta'>Posted <a href='#''>" +postedBy +"</a>";
-    appArticle += " on <span class='post-data'>" +pubDate +"</span>, " +source +"</p><div>";
-    $('.post-preview').append(appArticle); 
-}
-
-
+    // error function
+    function errorLoad(data) {
+        console.log(data);
+    }
+    // get articles and start function adding all to site
+    function objloop(array) {
+        for (var i = 0; i < array.length; i++) {
+            showArticles(array[i]);
+        };
+    };
+    // add articles to HTML
+    function showArticles(article) {
+        var headline = article.headline.main;
+        var pubDate = article.pub_date;
+        var snippet = article.snippet;
+        var source = article.source;
+        var postedBy = article.byline.original;
+        var articleURL = article.web_url;
+        var appArticle = "<div class='main-article'><a href='" + articleURL + "'>";
+        appArticle += "<h2 class='post-title'>" + headline + "</h2>";
+        appArticle += "<h3 class='post-info'>" + snippet + "</h3></a>";
+        appArticle += "<p class='post-meta'>Posted <a href='#''>" + postedBy + "</a>";
+        appArticle += " on <span class='post-data'>" + pubDate + "</span>, " + source + "</p><div>";
+        $('.post-preview').append(appArticle);
+    }
+    // function sort articles by date - newest to oldest
+    function sortNew(obj) {
+        $('.main-article').remove(); // remove articles and add sorted by date
+        obj.sort(function(a, b) {
+            a = new Date(a.pub_date);
+            b = new Date(b.pub_date);
+            return a > b ? -1 : a < b ? 1 : 0;
+        });
+        objloop(obj);
+    }
+    // function sort articles by date - oldest to newest
+    function sortOld(obj) {
+        $('.main-article').remove(); // remove articles and add sorted by date
+        obj.sort(function(a, b) {
+            a = new Date(a.pub_date);
+            b = new Date(b.pub_date);
+            return b > a ? -1 : b < a ? 1 : 0;
+        });
+        objloop(obj);
+    }
 });
-
 /*!
  * Start Bootstrap - Clean Blog v3.3.7+1 (http://startbootstrap.com/template-overviews/clean-blog)
  * Copyright 2013-2016 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 $(function(){$("body").on("input propertychange",".floating-label-form-group",function(o){$(this).toggleClass("floating-label-form-group-with-value",!!$(o.target).val())}).on("focus",".floating-label-form-group",function(){$(this).addClass("floating-label-form-group-with-focus")}).on("blur",".floating-label-form-group",function(){$(this).removeClass("floating-label-form-group-with-focus")})}),jQuery(document).ready(function(o){var s=1170;if(o(window).width()>s){var i=o(".navbar-custom").height();o(window).on("scroll",{previousTop:0},function(){var s=o(window).scrollTop();s<this.previousTop?s>0&&o(".navbar-custom").hasClass("is-fixed")?o(".navbar-custom").addClass("is-visible"):o(".navbar-custom").removeClass("is-visible is-fixed"):s>this.previousTop&&(o(".navbar-custom").removeClass("is-visible"),s>i&&!o(".navbar-custom").hasClass("is-fixed")&&o(".navbar-custom").addClass("is-fixed")),this.previousTop=s})}});
-// Contact Form Scripts
-
-$(function() {
-
-    $("#contactForm input,#contactForm textarea").jqBootstrapValidation({
-        preventSubmit: true,
-        submitError: function($form, event, errors) {
-            // additional error messages or events
-        },
-        submitSuccess: function($form, event) {
-            event.preventDefault(); // prevent default submit behaviour
-            // get values from FORM
-            var name = $("input#name").val();
-            var email = $("input#email").val();
-            var phone = $("input#phone").val();
-            var message = $("textarea#message").val();
-            var firstName = name; // For Success/Failure Message
-            // Check for white space in name for Success/Fail message
-            if (firstName.indexOf(' ') >= 0) {
-                firstName = name.split(' ').slice(0, -1).join(' ');
-            }
-            $.ajax({
-                url: "././mail/contact_me.php",
-                type: "POST",
-                data: {
-                    name: name,
-                    phone: phone,
-                    email: email,
-                    message: message
-                },
-                cache: false,
-                success: function() {
-                    // Success message
-                    $('#success').html("<div class='alert alert-success'>");
-                    $('#success > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
-                        .append("</button>");
-                    $('#success > .alert-success')
-                        .append("<strong>Your message has been sent. </strong>");
-                    $('#success > .alert-success')
-                        .append('</div>');
-
-                    //clear all fields
-                    $('#contactForm').trigger("reset");
-                },
-                error: function() {
-                    // Fail message
-                    $('#success').html("<div class='alert alert-danger'>");
-                    $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
-                        .append("</button>");
-                    $('#success > .alert-danger').append("<strong>Sorry " + firstName + ", it seems that my mail server is not responding. Please try again later!");
-                    $('#success > .alert-danger').append('</div>');
-                    //clear all fields
-                    $('#contactForm').trigger("reset");
-                },
-            });
-        },
-        filter: function() {
-            return $(this).is(":visible");
-        },
-    });
-
-    $("a[data-toggle=\"tab\"]").click(function(e) {
-        e.preventDefault();
-        $(this).tab("show");
-    });
-});
-
-
-/*When clicking on Full hide fail/success boxes */
-$('#name').focus(function() {
-    $('#success').html('');
-});
-
 /* jqBootstrapValidation
  * A plugin for automating validation on Twitter Bootstrap formatted forms.
  *
