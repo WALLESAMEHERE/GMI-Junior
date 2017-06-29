@@ -162,34 +162,34 @@ hr.small {
     .intro-header .post-heading .subheading {
       font-size: 30px; } }
 
-.post-preview > a {
+.post-preview > .main-article > a {
   color: #333333; }
-  .post-preview > a:hover, .post-preview > a:focus {
+  .post-preview > .main-article > a:hover, .post-preview > .main-article > a:focus {
     text-decoration: none;
     color: #0085A1; }
-  .post-preview > a > .post-title {
+  .post-preview > .main-article > a > .post-title {
     font-size: 30px;
     margin-top: 30px;
     margin-bottom: 10px; }
-  .post-preview > a > .post-info {
+  .post-preview > .main-article > a > .post-info {
     margin: 0;
     font-weight: 300;
     margin-bottom: 10px; }
 
-.post-preview > .post-meta {
+.post-preview > .main-article > .post-meta {
   color: #777777;
   font-size: 18px;
   font-style: italic;
   margin-top: 0; }
-  .post-preview > .post-meta > a {
+  .post-preview > .main-article > .post-meta > a {
     text-decoration: none;
     color: #333333; }
-    .post-preview > .post-meta > a:hover, .post-preview > .post-meta > a:focus {
+    .post-preview > .main-article > .post-meta > a:hover, .post-preview > .main-article > .post-meta > a:focus {
       color: #0085A1;
       text-decoration: underline; }
 
 @media only screen and (min-width: 768px) {
-  .post-preview > a > .post-title {
+  .post-preview > .main-article > a > .post-title {
     font-size: 36px; } }
 
 .section-heading {
@@ -328,3 +328,6 @@ img::-moz-selection {
 
 body {
   -webkit-tap-highlight-color: #0085A1; }
+
+.filterByDate {
+  text-align: right; }

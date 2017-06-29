@@ -85,24 +85,30 @@ function loadArticle(data){
     for(var i =0;i<arrayWithArticles.length;i++){
         showAtricles(arrayWithArticles[i]);
     }
+    $('#lowerData').on('click',function(){
+        console.log(arrayWithArticles);
+        arrayWithArticles.reverse();
+        console.log(arrayWithArticles);
+    });
 }
 function errorLoad(data){
-    console.log(response);
+
 }
 
 function showAtricles(article){
-    console.log(article)
     var headline = article.headline.main;
     var pubDate = article.pub_date;
     var snippet = article.snippet;
     var source = article.source;
     var postedBy = article.byline.original;
     var articleURL = article.web_url;
-    var appArticle = "<a href='"+articleURL+"'>";
+    var appArticle = "<div class='main-article'><a href='"+articleURL+"'>";
     appArticle += "<h2 class='post-title'>" + headline +"</h2>";
     appArticle += "<h3 class='post-info'>" +snippet +"</h3></a>";
-    appArticle += "<p class='post-meta'>Posted by <a href='#''>" +postedBy +"</a>";
-    appArticle += " on <span class='post-data'>" +pubDate +"</span>, " +source +"</p>";
+    appArticle += "<p class='post-meta'>Posted <a href='#''>" +postedBy +"</a>";
+    appArticle += " on <span class='post-data'>" +pubDate +"</span>, " +source +"</p><div>";
     $('.post-preview').append(appArticle); 
 }
+
+
 });
